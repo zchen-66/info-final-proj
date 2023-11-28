@@ -30,3 +30,7 @@ new_air_df <- summarize(
 df <- merge(x=deaths_df, y=new_air_df, by.x=c("state_name", "YEAR"), by.y=c("state_name", "year"), all.x=TRUE)
 df <- subset(df, select=c(-URL))
 df <- filter(df, YEAR != 2005)
+
+# Get rid of comma in numbers
+df$"DEATHS" <- ifelse(str_detect(df$"DEATHS", ","), str_remove(df$"DEATHS", ","),df$"DEATHS")
+df$"DEATHS" <- as.numeric(df$"DEATHS")

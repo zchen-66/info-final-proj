@@ -1,5 +1,5 @@
 library(shiny)
-library(ggplot)
+library(ggplot2)
 
 # Define UI ----
 ui <- fluidPage(

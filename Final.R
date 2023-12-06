@@ -34,3 +34,17 @@ df <- filter(df, YEAR != 2005)
 # Get rid of comma in numbers
 df$"DEATHS" <- ifelse(str_detect(df$"DEATHS", ","), str_remove(df$"DEATHS", ","),df$"DEATHS")
 df$"DEATHS" <- as.numeric(df$"DEATHS")
+
+
+
+
+# Description
+  # top 5 highest death rate states
+  # top 5 pm level states
+    # see if they match
+  # state with the most change is
+# interactive map page
+  # compare between states
+# scatter plot of deaths/pm over years page
+  # compares over years
+# 

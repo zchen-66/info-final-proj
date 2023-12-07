@@ -69,6 +69,53 @@ avg_air_quality_df$urgency_index <- round((avg_air_quality_df$pm25_rank +
                                              avg_air_quality_df$pm10_rank + 
                                              avg_air_quality_df$no2_rank) /3, 0)
 
+# Write a function that given a state as a string and a dataframe containing 
+# the dataset, returns the state air quality information an HTML string. 
+get_state_info <- function(df, state){
+  df <- filter(df, state_name == state)
+  if(df$"urgency_index" < 15){
+    quality <- "very terrible"
+  } else if (df$"urgency_index" < 23) {
+    quality <- "not good"
+  } else if (df$"urgency_index" < 28) {
+    quality <- "mediocre"
+  } else if (df$"urgency_index" < 35) {
+    quality <- "good"
+  } else {
+    quality <- "very excellent"
+  }
+  
+  pm10_rank <- df$pm10_rank
+  pm25_rank <- df$pm25_rank
+  no2_rank <- df$no2_rank
+  avg_pm10 <- round(df$avg_pm10, 2)
+  avg_pm25 <- round(df$avg_pm25, 2)
+  avg_no2 <- round(df$avg_no2, 2)
+    
+  
+  info <- sprintf("Overall, %s's air pollutant level from 2014 to 2021 is %s when 
+  compared to other states, as %s ranks %s in PM10 Levels, %s in PM2.5 
+  Levels, and %s in NO2 Levels.\n\n\n\n
+  Below are some stats regarding the average air pollutant levels in %s:\n\n
+  Average PM10 Level: %s\n\n
+  Average PM2.5 level: %s\n\n
+  Average NO2 Level: %s", state, quality, state, pm10_rank, pm25_rank, no2_rank, state,
+                  avg_pm10, avg_pm25, avg_no2)
+  
+  info <- HTML(
+    str_replace_all(
+      HTML(
+        info
+      ),
+      "\n\n",
+      "<br/>"
+    )
+  )
+  
+  
+  return(info)
+}
+
 # Fill out the following function called `states_over_time` that given a 
 # String state and a String type (representing the type of air pollution),
 # returns a line graph The line graph your function creates should have 
@@ -83,15 +130,41 @@ avg_air_quality_df$urgency_index <- round((avg_air_quality_df$pm25_rank +
 # your plot must have proper axes labels and must have proper legend labels! 
 # Do not use default labels! 
 
-state_df <- filter(df, state_name == "Washington")
-DEATHS_linechart <- ggplot(data = state_df, aes(x=YEAR, y=DEATHS)) +
-  geom_line() +
-  labs(x="Year", y = "Respiratory Deaths",
-       title="Respiratory Deaths over time in Washington")
-PM25_linechart <- ggplot(data = state_df, aes(x=YEAR, y=avg_pm25)) +
-  geom_line() +
-  labs(x="Year", y = "Respiratory Deaths",
-       title="Respiratory Deaths over time in Washington")
+state_over_time_linechart <- function(state, type){
+  state_df <- filter(df, state_name == state)
+  coeff <- mean(state_df[,type]) / mean(state_df[, "DEATHS"])
+  
+  if(type == "avg_pm10"){
+    name <- "PM10"
+  }
+  if(type == "avg_pm25"){
+    name <- "PM2.5"
+  }
+  if(type == "avg_no2"){
+    name <- "NO2"
+  }
+
+  linechart <- ggplot(data = state_df, aes(x=YEAR)) +
+    geom_line( aes(y=DEATHS, color = "Respiratory Deaths"), size = 1) +
+    geom_point(aes(y=DEATHS), color = "blue", shape = 17, size = 2) +
+    geom_line( aes(y=eval(parse(text=type)) / coeff, color = sprintf("%s Level", name)), size = 1) +
+    geom_point(aes(y=eval(parse(text=type)) / coeff), color = "red", shape = 20, size = 2.5) +
+    labs(x="Year", color = "Legend",
+         title=sprintf("Respiratory Deaths and %s Level over time in %s", name, state)) +
+    scale_color_manual(values=c('Red','Blue')) +
+    scale_x_continuous(breaks = scales::pretty_breaks(n=8)) +
+    scale_y_continuous(
+
+      # Features of the first axis
+      name = "Respiratory Deaths",
+
+      # Add a second axis and specify its features
+      sec.axis = sec_axis( trans=~.*coeff, name=sprintf("%s Level", name))
+    )
+
+  return(linechart)
+}
+#plot(state_over_time_linechart("Washington", "avg_pm25"))
 
 
 
@@ -102,8 +175,9 @@ PM25_linechart <- ggplot(data = state_df, aes(x=YEAR, y=avg_pm25)) +
 
 
 
-
-
+# Exports final dataframe (DO NOT CHANGE!!!!!!!!!!!!)
+write.csv(df, sprintf("%s/df.csv", getwd()), row.names=FALSE)
+write.csv(avg_air_quality_df, sprintf("%s/avg_air_quality_df.csv", getwd()), row.names=FALSE)
 
 
 # Description

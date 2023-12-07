@@ -2,6 +2,13 @@ library(shiny)
 library(shinyWidgets)
 library(ggplot2)
 library(fmsb)
+library(plotly)
+
+source("Final.R")
+
+#Load in dataset (DO NOT CHANGE)
+df <- read.csv("df.csv")
+avg_air_quality_df <- read.csv("avg_air_quality_df.csv")
 
 # Define UI ----
 home_page <- fluidPage(
@@ -37,8 +44,25 @@ home_page <- fluidPage(
   )
 )
 
-scatter_plot <- fluidPage(
-  h1("scatter plot of deaths/pm over years page")
+line_plot <- fluidPage(
+  h1("linechart of deaths/pm over years page"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(
+        inputId = "state_name",
+        label = "Select State",
+        choices = df$state_name,
+        selected = 1
+      ),
+      htmlOutput(outputId = "state_info"),
+      br()
+    ),
+    mainPanel(
+      h3("Linechart over the years"),
+      plotlyOutput(outputId = "line"),
+    )
+  ),
 )
 
 interactive_map <- fluidPage(
@@ -50,7 +74,7 @@ ui <- navbarPage(
   br(),
   br(),
   tabPanel("Intro Page", home_page),
-  tabPanel("Plot to compare pm rates to deaths over the years", scatter_plot),
+  tabPanel("Plot to compare pm rates to deaths over the years", line_plot),
   tabPanel("Map of the States", interactive_map)
 )
 
@@ -58,6 +82,19 @@ ui <- navbarPage(
 # Define server logic ----
 server <- function(input, output) {
   
+  
+  output$state_info <- renderUI({
+    get_state_info(avg_air_quality_df, input$state_name)
+  })
+  
+  
+  output$line <- renderPlotly({
+
+    p <- state_over_time_linechart(input$state_name, "avg_pm25")
+    
+    p <- ggplotly(p, tooltip = "text")
+    return(p)
+  })
 }
 
 # Run the app ----

@@ -116,6 +116,45 @@ get_state_info <- function(df, state){
   return(info)
 }
 
+# Write a function that given a pollutant as a string, returns 
+# the air pollutant information an HTML string. 
+get_pollutant_info <- function(pollutant){
+  if (pollutant == "avg_pm10"){
+    info <- "PM10, or particulate matter with a diameter of 10 micrometers or less,
+    consists of airborne particles originating from various sources, including dust, 
+    wildfires, and industrial activities. While larger than PM2.5, PM10 particles can 
+    still affect respiratory health. Regulations and monitoring efforts are implemented 
+    to manage PM10 levels, promoting air quality and protecting public health by controlling
+    the concentration of these particles in the atmosphere."
+  } else if (pollutant == "avg_pm25"){
+    info <- "PM2.5 refers to ultra-fine particles in the air originating from sources
+    like wildfires and vehicle emissions. Inhaling these particles can lead to health
+    issues, particularly impacting the respiratory and cardiovascular systems. To ensure
+    air quality and public well-being, regulations and monitoring are in place to control
+    the levels of PM2.5 in the atmosphere."
+  } else if (pollutant == "avg_no2"){
+    info <- "NO2, or nitrogen dioxide, is a gaseous air pollutant primarily generated from 
+    combustion processes in vehicles, industrial operations, and power plants. Inhaling NO2 
+    can pose health risks, particularly impacting the respiratory system. To safeguard air 
+    quality and public health, regulatory measures and monitoring systems are in place to 
+    control NO2 levels in the atmosphere, aiming to mitigate adverse health effects and 
+    environmental consequences associated with this pollutant."
+  }
+  
+  info <- HTML(
+    str_replace_all(
+      HTML(
+        info
+      ),
+      "\n\n",
+      "<br/>"
+    )
+  )
+  
+  
+  return(info)
+}
+
 # Fill out the following function called `states_over_time` that given a 
 # String state and a String type (representing the type of air pollution),
 # returns a line graph The line graph your function creates should have 
@@ -146,9 +185,11 @@ state_over_time_linechart <- function(state, type){
 
   linechart <- ggplot(data = state_df, aes(x=YEAR)) +
     geom_line( aes(y=DEATHS, color = "Respiratory Deaths"), size = 1) +
-    geom_point(aes(y=DEATHS), color = "blue", shape = 17, size = 2) +
-    geom_line( aes(y=eval(parse(text=type)) / coeff, color = sprintf("%s Level", name)), size = 1) +
-    geom_point(aes(y=eval(parse(text=type)) / coeff), color = "red", shape = 20, size = 2.5) +
+    geom_point(aes(y=DEATHS, text=DEATHS), color = "blue", shape = 17, size = 2) +
+    geom_line( aes(y=eval(parse(text=type)) / coeff, text=round(eval(parse(text=type)), 2), color = sprintf("%s Level", name)), size = 1) +
+    geom_point(
+      aes(y=eval(parse(text=type)) / coeff),
+      color = "red", shape = 20, size = 2.5) +
     labs(x="Year", color = "Legend",
          title=sprintf("Respiratory Deaths and %s Level over time in %s", name, state)) +
     scale_color_manual(values=c('Red','Blue')) +

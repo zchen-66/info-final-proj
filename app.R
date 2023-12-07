@@ -12,27 +12,27 @@ avg_air_quality_df <- read.csv("avg_air_quality_df.csv")
 
 # Define UI ----
 home_page <- fluidPage(
-  setBackgroundColor("lightblue"),
-  tags$style(
-    HTML(
-      "
-      body {
-        margin: 0;
-        background-image: url(smoky.png);
-        background-position: center;
-        background-size: cover;
-        height: 100vh;
-      }
-      #container {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }"
-    )
-  ),
+  # setBackgroundColor("lightblue"),
+  # tags$style(
+  #   HTML(
+  #     "
+  #     body {
+  #       margin: 0;
+  #       background-image: url(smoky.png);
+  #       background-position: center;
+  #       background-size: cover;
+  #       height: 100vh;
+  #     }
+  #     #container {
+  #       width: 100%;
+  #       height: 100%;
+  #       display: flex;
+  #       flex-direction: column;
+  #       justify-content: center;
+  #       align-items: center;
+  #     }"
+  #   )
+  # ),
   div(
     id = "container",
     title <- h1("How does air pollution and deaths caused by respiratory diseases relate?", style = "color:black"),
@@ -53,14 +53,27 @@ line_plot <- fluidPage(
         inputId = "state_name",
         label = "Select State",
         choices = df$state_name,
-        selected = 1
+        selected = 3
       ),
       htmlOutput(outputId = "state_info"),
       br()
     ),
     mainPanel(
       h3("Linechart over the years"),
-      plotlyOutput(outputId = "line"),
+      actionButton(
+        input = "pm10",
+        label = "PM10"
+      ),
+      actionButton(
+        input = "pm25",
+        label = "PM2.5"
+      ),
+      actionButton(
+        input = "no2",
+        label = "NO2"
+      ),
+      plotOutput(outputId = "line"),
+      htmlOutput(outputId = "pollutant_info")
     )
   ),
 )
@@ -83,18 +96,50 @@ ui <- navbarPage(
 server <- function(input, output) {
   
   
+  values <- reactiveValues(
+    pollutant_type = "avg_pm10"
+  )
+  
+  observeEvent(input$pm10, {
+    values$pollutant_type <- "avg_pm10"
+  }) 
+  observeEvent(input$pm25, {
+    values$pollutant_type <- "avg_pm25"
+  })
+  observeEvent(input$no2, {
+    values$pollutant_type <- "avg_no2"
+  })
+  
   output$state_info <- renderUI({
     get_state_info(avg_air_quality_df, input$state_name)
   })
   
-  
-  output$line <- renderPlotly({
-
-    p <- state_over_time_linechart(input$state_name, "avg_pm25")
-    
-    p <- ggplotly(p, tooltip = "text")
+  output$line <- renderPlot({
+    p <- state_over_time_linechart(input$state_name, values$pollutant_type)
     return(p)
   })
+  
+  output$pollutant_info <- renderUI({
+    get_pollutant_info(values$pollutant_type)
+  })
+  
+  # output$pollutant_info <- renderText({
+  #   if(input$pm10 == 1){
+  #     pollutant_type <- "avg_pm10"
+  #     
+  #     paste("pm10 is this blah blah blah")
+  #   } else if(input$pm25 == 1){
+  #     pollutant_type <- "avg_pm25"
+  #     output$line
+  #     paste("pm2.5 is this blah blah blah")
+  #   } else if(input$no2 == 1){
+  #     pollutant_type <- "avg_no2"
+  #     paste("no2 is this blah blah blah")
+  #   }
+  # })
+
+  
+  
 }
 
 # Run the app ----

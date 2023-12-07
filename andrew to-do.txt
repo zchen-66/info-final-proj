@@ -1,0 +1,4 @@
+TODO LIST (for Andrew)
+- better UI
+- remove graph ("no data/graph available") for when a state does not have a specific type of data
+	- instead of just crashing the graph and getting an error

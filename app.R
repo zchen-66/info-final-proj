@@ -45,38 +45,73 @@ home_page <- fluidPage(
 )
 
 line_plot <- fluidPage(
-  h1("linechart of deaths/pm over years page"),
-  
-  sidebarLayout(
-    sidebarPanel(
-      selectInput(
-        inputId = "state_name",
-        label = "Select State",
-        choices = df$state_name,
-        selected = 3
-      ),
-      htmlOutput(outputId = "state_info"),
-      br()
-    ),
-    mainPanel(
-      h3("Linechart over the years"),
-      actionButton(
-        input = "pm10",
-        label = "PM10"
-      ),
-      actionButton(
-        input = "pm25",
-        label = "PM2.5"
-      ),
-      actionButton(
-        input = "no2",
-        label = "NO2"
-      ),
-      plotOutput(outputId = "line"),
-      htmlOutput(outputId = "pollutant_info")
-    )
+  theme = bslib::bs_theme(version = 5),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "site.css")
   ),
+  setBackgroundColor("#ebf6fa"),
+  HTML('<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Questrial&display=swap" rel="stylesheet">'),
+  div(class = "test",
+    h1(
+      strong("OVER THE YEARS..."),
+      style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                letter-spacing: .2rem; color: #466378",
+      align = "center"
+    ),
+    style = "padding-bottom: 50px"
+  ),
+  div(class="container",
+    style="font-family: 'Noto Sans'; color: #3d3d3d",
+    fluidRow(
+        column(4,
+          selectInput(
+            inputId = "state_name",
+            label = "Select State",
+            choices = df$state_name,
+            selected = 1
+          ),
+          htmlOutput(outputId = "state_info"),
+          br(),
+          style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
+        ),
+        column(8,
+          fluidRow(
+            p(
+              strong("Select air pollution type:"), 
+              style = "font-size:15px; padding-bottom: 1px",
+              actionButton(
+                input = "pm10",
+                label = "PM10",
+                style= "padding:4px; font-size:80%",
+                class = "btn-primary"
+              ),
+              actionButton(
+                input = "pm25",
+                label = "PM2.5",
+                style= "padding:4px; font-size:80%",
+                class = "btn-primary"
+              ),
+              actionButton(
+                input = "no2",
+                label = "NO2",
+                style= "padding:4px; font-size:80%",
+                class = "btn-primary"
+              ), 
+            ),
+            align="center",
+          ),
+          plotOutput(outputId = "line"),
+          htmlOutput(outputId = "pollutant_info")
+        )
+      )
+    )
 )
+
+# -------------------------------------------------------------------------
+
 
 interactive_map <- fluidPage(
   h1("interactive map page to compare between states")

@@ -191,12 +191,25 @@ state_over_time_linechart <- function(state, type){
       aes(y=eval(parse(text=type)) / coeff),
       color = "red", shape = 20, size = 2.5) +
     labs(x="Year", color = "Legend",
-         title=sprintf("Respiratory Deaths and %s Level over time in %s", name, state)) +
+         title=sprintf(("Respiratory Deaths and %s Level over time in %s"), name, state)) +
+    theme_classic() +
+    theme(plot.title = element_text(size=22, hjust = 0.5),
+          plot.background = element_rect(fill= '#ebf6fa'),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          panel.grid.major.y = element_line(color='black', size=0.25),
+          # panel.border = element_rect(color='black', fill=NA),
+          panel.background = element_rect(fill = 'white'),
+          legend.box.background = element_rect(fill = "#ebf6fa")) +
+    # element_text(family = NULL, face = NULL, colour = NULL, size = NULL,
+    #              hjust = NULL, vjust = NULL, angle = NULL, lineheight = NULL,
+    #              color = NULL)
     scale_color_manual(values=c('Red','Blue')) +
     scale_x_continuous(breaks = scales::pretty_breaks(n=8)) +
     scale_y_continuous(
 
-      # Features of the first axis
+      # Features of the first axis  
       name = "Respiratory Deaths",
 
       # Add a second axis and specify its features

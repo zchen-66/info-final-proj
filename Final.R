@@ -37,7 +37,17 @@ df <- filter(df, YEAR != 2005)
 df$"DEATHS" <- ifelse(str_detect(df$"DEATHS", ","), str_remove(df$"DEATHS", ","),df$"DEATHS")
 df$"DEATHS" <- as.numeric(df$"DEATHS")
 
+# for U.S. States Map
+df_mainland <- filter(df, state_name != "Alaska" & state_name != "Hawaii")
 
+# U.S. State map data
+state_names <- state.name[state.name != "Alaska" & state.name != "Hawaii"]
+state_names[19] <- "massachusetts:main"
+state_names[20] <- "michigan:south"
+state_names[30] <- "new york:main"
+state_names[31] <- "north carolina:main"
+state_names[44] <- "virginia:main"
+state_names[45] <- "washington:main"
 
 # ----------------- Over time Scatterplot Page ------------------------ #
 # (andrew's stuff no touchy)
@@ -139,6 +149,10 @@ get_pollutant_info <- function(pollutant){
     quality and public health, regulatory measures and monitoring systems are in place to 
     control NO2 levels in the atmosphere, aiming to mitigate adverse health effects and 
     environmental consequences associated with this pollutant."
+  } else if (pollutant == "RATE"){
+    info <- "The death rate refers to the Chronic Lower Respiratory Disease Death Rate. The rate is the number 
+    of deaths per 100,000 total population. CDC defines chronic lower respiratory diseases as: chronic obstructive 
+    pulmonary disease (COPD), chronic bronchitis, emphysema, and asthma."
   }
   
   info <- HTML(
@@ -221,6 +235,104 @@ state_over_time_linechart <- function(state, type){
 #plot(state_over_time_linechart("Washington", "avg_pm25"))
 
 
+
+##### for u.s. state maps page :)
+percent_map <- function(choice, year, min=0, max=100) {
+  var <- filter(df_mainland, YEAR == year)$RATE
+  color <- "red3"
+  legend.title <- "Death Rate"
+  
+  if (choice != "RATE") {
+    if(choice == "avg_pm10") {
+      var <- filter(df_mainland, YEAR == year)$avg_pm10
+      color <- "blue3"
+      legend.title <- "Average PM10"
+    } else if(choice == "avg_pm25") {
+      var <- filter(df_mainland, YEAR == year)$avg_pm25
+      color <- "green3"
+      legend.title <- "Average PM2.5"
+    } else {
+      var <- filter(df_mainland, YEAR == year)$avg_no2
+      color <- "yellow2"
+      legend.title <- "Average NO2"
+    }
+  }
+  
+  # generate vector of fill colors for map
+  shades <- colorRampPalette(c("white", color))(100)
+  # constrain gradient to percents that occur between min and max
+  var <- pmax(var, min)
+  var <- pmin(var, max)
+  percents <- as.integer(cut(var, 100, include.lowest = TRUE, ordered = TRUE))
+  fills <- shades[percents]
+  fills <- replace(fills, is.na(fills), "#A9A9A9")
+  legend_fill <- shades[c(1, 25, 50, 75, 100)]
+  legend_fill[6] <- "#A9A9A9"
+  # overlay state borders
+  map("state", region = state_names, fill = TRUE, col = fills, 
+      resolution = 0, lty = 1, projection = "polyconic", 
+      myborder = 0, mar = c(0,0,0,0))
+  # add a legend
+  inc <- round((max(var, na.rm=TRUE) - min(var, na.rm=TRUE)) / 4, 1)
+  legend.text <- c(paste0(round(min(var, na.rm=TRUE), 1), " or less"),
+                   paste0(round(min(var, na.rm=TRUE), 1) + inc, ""),
+                   paste0(round(min(var, na.rm=TRUE), 1) + 2 * inc, ""),
+                   paste0(round(min(var, na.rm=TRUE), 1) + 3 * inc, ""),
+                   paste0(round(max(var, na.rm=TRUE), 1), " or more"),
+                   paste0("NA Values"))
+  legend("bottomleft", 
+         legend = legend.text, 
+         fill = legend_fill,
+         title = legend.title)
+}
+
+get_US_map_info <- function(choice, year){
+  df_us <- filter(df_mainland, YEAR == year)
+  us_specific <- df_us$RATE
+  type <- "Death Rate"
+  state_max <- filter(df_mainland, RATE == max(us_specific, na.rm=TRUE), na.rm=TRUE)$state_name[1]
+  state_min <- filter(df_mainland, RATE == min(us_specific, na.rm=TRUE), na.rm=TRUE)$state_name[1]
+  
+  if (choice != "RATE") {
+    if(choice == "avg_pm10") {
+      us_specific <- df_us$avg_pm10
+      type <- "PM10 Level"
+      state_max <- filter(df_mainland, avg_pm10 == max(us_specific, na.rm=TRUE), na.rm=TRUE)$state_name[1]
+      state_min <- filter(df_mainland, avg_pm10 == min(us_specific, na.rm=TRUE), na.rm=TRUE)$state_name[1]
+    } else if(choice == "avg_pm25") {
+      us_specific <- df_us$avg_pm25
+      type <- "PM2.5 Level"
+      state_max <- filter(df_mainland, avg_pm25 == max(us_specific, na.rm=TRUE), na.rm=TRUE)$state_name[1]
+      state_min <- filter(df_mainland, avg_pm25 == min(us_specific, na.rm=TRUE), na.rm=TRUE)$state_name[1]
+    } else {
+      us_specific <- df_us$avg_no2
+      type <- "NO2 Level"
+      state_max <- filter(df_mainland, avg_no2 == max(us_specific, na.rm=TRUE), na.rm=TRUE)$state_name[1]
+      state_min <- filter(df_mainland, avg_no2 == min(us_specific, na.rm=TRUE), na.rm=TRUE)$state_name[1]
+    }
+  }
+  
+  choice_max <- max(us_specific, na.rm=TRUE)
+  choice_min <- min(us_specific, na.rm=TRUE)
+  choice_avg <- round(mean(us_specific, na.rm=TRUE), 2)
+  
+  info <- sprintf(
+    "Highest %s: %s with %s\n\n
+    Lowest %s: %s with %s\n\n
+    Average %s: %s", 
+    type, state_max, round(choice_max, 2), type, state_min, round(choice_min, 2), type, choice_avg
+  )
+  info <- HTML(
+    str_replace_all(
+      HTML(
+        info
+      ),
+      "\n\n",
+      "<br/>"
+    )
+  )
+  return(info)
+}
 
 
 

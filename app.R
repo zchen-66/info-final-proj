@@ -3,6 +3,8 @@ library(shinyWidgets)
 library(ggplot2)
 library(fmsb)
 library(plotly)
+library(maps)
+library(mapproj)
 
 source("Final.R")
 
@@ -114,7 +116,39 @@ line_plot <- fluidPage(
 
 
 interactive_map <- fluidPage(
-  h1("interactive map page to compare between states")
+  h1("Map of the Contiguous United States"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("var", 
+                  label = "Choose a year to display",
+                  choices = df$YEAR[1:8],
+                  selected = df$YEAR[1:1]),
+      sliderInput("range", 
+                  label = "Range of interest:",
+                  min = 0, max = 70, value = c(0, 70)),
+      htmlOutput(outputId = "US_map_info")
+    ),
+    mainPanel(textOutput("choice_title"), tags$head(tags$style("#choice_title{font-size:25px;}")),
+              actionButton(
+                input = "USdeath",
+                label = "Death Rate"
+              ),
+              actionButton(
+                input = "USpm10",
+                label = "PM10"
+              ),
+              actionButton(
+                input = "USpm25",
+                label = "PM2.5"
+              ),
+              actionButton(
+                input = "USno2",
+                label = "NO2"
+              ),
+              plotOutput("map"),
+              htmlOutput(outputId = "US_info")
+    )
+  )
 )
 
 
@@ -173,6 +207,41 @@ server <- function(input, output) {
   #   }
   # })
 
+  
+  ### U.S. Map server stuff
+  USvalues <- reactiveValues(
+    USchoice = "RATE"
+  )
+  
+  output$choice_title <- renderText({"Chronic Lower Respiratory Disease Death Rate in the United States"})
+  
+  observeEvent(input$USdeath, {
+    USvalues$USchoice <- "RATE"
+    output$choice_title <- renderText({"Chronic Lower Respiratory Disease Death Rate in the United States"})
+  }) 
+  observeEvent(input$USpm10, {
+    USvalues$USchoice <- "avg_pm10"
+    output$choice_title <- renderText({"Average PM10 Level in the United States"})
+  }) 
+  observeEvent(input$USpm25, {
+    USvalues$USchoice <- "avg_pm25"
+    output$choice_title <- renderText({"Average PM2.5 Level in the United States"})
+  })
+  observeEvent(input$USno2, {
+    USvalues$USchoice <- "avg_no2"
+    output$choice_title <- renderText({"Average NO2 Level in the United States"})
+  })
+  
+  
+  output$US_map_info <- renderUI({
+    get_US_map_info(USvalues$USchoice, input$var)
+  })
+  output$map <- renderPlot({
+    percent_map(USvalues$USchoice, input$var, input$range[1], input$range[2])
+  })
+  output$US_info <- renderUI({
+    get_pollutant_info(USvalues$USchoice)
+  })
   
   
 }

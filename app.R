@@ -151,15 +151,83 @@ interactive_map <- fluidPage(
   )
 )
 
+# -------------------------------------------------------------------------
+
+scatter_plot <- fluidPage(
+  theme = bslib::bs_theme(version = 5),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "site.css")
+  ),
+  setBackgroundColor("#ebf6fa"),
+  HTML('<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Questrial&display=swap" rel="stylesheet">'),
+  div(class = "test",
+      h1(
+        strong("OVER THE YEARS..."),
+        style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                letter-spacing: .2rem; color: #466378",
+        align = "center"
+      ),
+      style = "padding-bottom: 50px"
+  ),
+  div(class="container",
+      style="font-family: 'Noto Sans'; color: #3d3d3d",
+      fluidRow(
+        column(4,
+               selectInput("scatter_var", 
+                           label = "Choose a year to display",
+                           choices = df$YEAR[1:8],
+                           selected = df$YEAR[1:1]),
+               style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
+        ),
+        column(8,
+               fluidRow(
+                 p(
+                   strong("Select:"), 
+                   style = "font-size:15px; padding-bottom: 1px",
+                   actionButton(
+                     input = "scatter_pm10",
+                     label = "PM10",
+                     style= "padding:4px; font-size:80%",
+                     class = "btn-primary"
+                   ),
+                   actionButton(
+                     input = "scatter_pm25",
+                     label = "PM2.5",
+                     style= "padding:4px; font-size:80%",
+                     class = "btn-primary"
+                   ),
+                   actionButton(
+                     input = "scatter_no2",
+                     label = "NO2",
+                     style= "padding:4px; font-size:80%",
+                     class = "btn-primary"
+                   ),
+                 ),
+                 align="center"
+               ),
+               plotOutput(outputId = "scatter"),
+               htmlOutput(outputId = "scatter_info")
+        )
+      )
+  )
+)
+
+# -------------------------------------------------------------------------
+
 
 ui <- navbarPage(
   br(),
   br(),
   tabPanel("Intro Page", home_page),
-  tabPanel("Plot to compare pm rates to deaths over the years", line_plot),
-  tabPanel("Map of the States", interactive_map)
+  tabPanel("Line Plot", line_plot),
+  tabPanel("Map of the States", interactive_map),
+  tabPanel("Scatter Plot", scatter_plot)
 )
 
+# -------------------------------------------------------------------------
 
 # Define server logic ----
 server <- function(input, output) {
@@ -208,6 +276,7 @@ server <- function(input, output) {
   # })
 
   
+  # -------------------------------------------------------------------------
   ### U.S. Map server stuff
   USvalues <- reactiveValues(
     USchoice = "RATE"
@@ -243,6 +312,30 @@ server <- function(input, output) {
     get_pollutant_info(USvalues$USchoice)
   })
   
+  
+  # ---------------------------------------------------------------------------------
+  ### Scatter plot :)
+  
+  scatter_values <- reactiveValues(
+    scatter_choice = "avg_pm10"
+  )
+  
+  observeEvent(input$scatter_pm10, {
+    scatter_values$scatter_choice <- "avg_pm10"
+  }) 
+  observeEvent(input$scatter_pm25, {
+    scatter_values$scatter_choice <- "avg_pm25"
+  })
+  observeEvent(input$scatter_no2, {
+    scatter_values$scatter_choice <- "avg_no2"
+  })
+  
+  output$scatter <- renderPlot({
+    plot(make_scatter(scatter_values$scatter_choice, input$scatter_var))
+  })
+  output$scatter_info <- renderUI({
+    get_pollutant_info(scatter_values$scatter_choice)
+  })
   
 }
 

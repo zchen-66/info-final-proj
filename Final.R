@@ -2,6 +2,7 @@
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(ggrepel)
 
 # ----------------- DATA WRANGLING ------------------------ #
 
@@ -174,18 +175,18 @@ get_pollutant_info <- function(pollutant){
 # returns a line graph The line graph your function creates should have 
 # the following characteristics: 
 #   x axis & Label: Year 
-#   left y-axis: Respiratory Deaths
+#   left y-axis: Respiratory Death Rate
 #   right y-axis: <air quality type> Level
-#   line color / point shape should correspond to either respiratory deaths
+#   line color / point shape should correspond to either respiratory death rate
 #   or the air quality level
-#   Title of the plot should read "Respiratory Deaths and <Air Quality> Level over time 
+#   Title of the plot should read "Respiratory Death Rate and <Air Quality> Level over time 
 #     in <STATE>" where <STATE> is the state specified by the user. 
 # your plot must have proper axes labels and must have proper legend labels! 
 # Do not use default labels! 
 
 state_over_time_linechart <- function(state, type){
   state_df <- filter(df, state_name == state)
-  coeff <- mean(state_df[,type]) / mean(state_df[, "DEATHS"])
+  coeff <- mean(state_df[,type]) / mean(state_df[, "RATE"])
   
   if(type == "avg_pm10"){
     name <- "PM10"
@@ -198,14 +199,14 @@ state_over_time_linechart <- function(state, type){
   }
 
   linechart <- ggplot(data = state_df, aes(x=YEAR)) +
-    geom_line( aes(y=DEATHS, color = "Respiratory Deaths"), size = 1) +
-    geom_point(aes(y=DEATHS, text=DEATHS), color = "blue", shape = 17, size = 2) +
+    geom_line( aes(y=RATE, color = "Respiratory Death Rate"), size = 1) +
+    geom_point(aes(y=RATE, text=RATE), color = "blue", shape = 17, size = 2) +
     geom_line( aes(y=eval(parse(text=type)) / coeff, text=round(eval(parse(text=type)), 2), color = sprintf("%s Level", name)), size = 1) +
     geom_point(
       aes(y=eval(parse(text=type)) / coeff),
       color = "red", shape = 20, size = 2.5) +
     labs(x="Year", color = "Legend",
-         title=sprintf(("Respiratory Deaths and %s Level over time in %s"), name, state)) +
+         title=sprintf(("Respiratory Death Rate and %s Level over time in %s"), name, state)) +
     theme_classic() +
     theme(plot.title = element_text(size=22, hjust = 0.5),
           plot.background = element_rect(fill= '#ebf6fa'),
@@ -224,7 +225,7 @@ state_over_time_linechart <- function(state, type){
     scale_y_continuous(
 
       # Features of the first axis  
-      name = "Respiratory Deaths",
+      name = "Respiratory Death Rate",
 
       # Add a second axis and specify its features
       sec.axis = sec_axis( trans=~.*coeff, name=sprintf("%s Level", name))
@@ -235,6 +236,7 @@ state_over_time_linechart <- function(state, type){
 #plot(state_over_time_linechart("Washington", "avg_pm25"))
 
 
+# -----------------------------------------------------------------------------------------
 
 ##### for u.s. state maps page :)
 percent_map <- function(choice, year, min=0, max=100) {
@@ -286,7 +288,7 @@ percent_map <- function(choice, year, min=0, max=100) {
          title = legend.title)
 }
 
-get_US_map_info <- function(choice, year){
+get_US_map_info <- function(choice, year) {
   df_us <- filter(df_mainland, YEAR == year)
   us_specific <- df_us$RATE
   type <- "Death Rate"
@@ -334,12 +336,42 @@ get_US_map_info <- function(choice, year){
   return(info)
 }
 
+# -------------------------------------------------------------------------------------
 
 
+make_scatter <- function(choice, year) {
+  df_scatter <- filter(df, YEAR == year)
+  
+  p <- ggplot(data=df_scatter, aes(x=avg_pm10, y=RATE)) + 
+    geom_point(na.rm=TRUE) +
+    geom_text_repel(aes(label = state_name), size = 3, na.rm=TRUE) + 
+    xlab("Average PM10 Level") +
+    ylab("Respiratory Death Rate") +
+    geom_abline(intercept = mean(df_scatter$avg_pm10, na.rm=TRUE))
+
+  if (choice != "avg_pm10") {
+    if (choice == "avg_pm25") {
+      p <- ggplot(data=df_scatter, aes(x=avg_pm25, y=RATE)) + 
+        geom_point(na.rm=TRUE) +
+        geom_text_repel(aes(label = state_name), size = 3, na.rm=TRUE) + 
+        xlab("Average PM2.5 Level") +
+        ylab("Respiratory Death Rate") + 
+        geom_abline(intercept=30)
+    } else {
+      p <- ggplot(data=df_scatter, aes(x=avg_no2, y=RATE)) + 
+        geom_point(na.rm=TRUE) +
+        geom_text_repel(aes(label = state_name), size = 3, na.rm=TRUE) + 
+        xlab("Average NO2 Level") +
+        ylab("Respiratory Death Rate") + 
+        geom_abline(intercept=25)
+    }
+  }
+  
+  return(p)
+}
 
 
-
-
+# -------------------------------------------------------------------------------------
 
 # Exports final dataframe (DO NOT CHANGE!!!!!!!!!!!!)
 write.csv(df, sprintf("%s/df.csv", getwd()), row.names=FALSE)

@@ -116,7 +116,16 @@ line_plot <- fluidPage(
 
 
 interactive_map <- fluidPage(
-  h1("Map of the Contiguous United States"),
+  div(class = "test",
+      h1(
+        strong("ACROSS THE STATES..."),
+        style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                letter-spacing: .2rem; color: #466378",
+        align = "center"
+      ),
+      style = "padding-bottom: 50px"
+  ),
   sidebarLayout(
     sidebarPanel(
       selectInput("var", 
@@ -154,17 +163,9 @@ interactive_map <- fluidPage(
 # -------------------------------------------------------------------------
 
 scatter_plot <- fluidPage(
-  theme = bslib::bs_theme(version = 5),
-  tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "site.css")
-  ),
-  setBackgroundColor("#ebf6fa"),
-  HTML('<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Questrial&display=swap" rel="stylesheet">'),
   div(class = "test",
       h1(
-        strong("OVER THE YEARS..."),
+        strong("INTO THE DATA..."),
         style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
                 padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
                 letter-spacing: .2rem; color: #466378",
@@ -176,10 +177,13 @@ scatter_plot <- fluidPage(
       style="font-family: 'Noto Sans'; color: #3d3d3d",
       fluidRow(
         column(4,
-               selectInput("scatter_var", 
-                           label = "Choose a year to display",
-                           choices = df$YEAR[1:8],
-                           selected = df$YEAR[1:1]),
+               # selectInput("scatter_var", 
+               #             label = "Choose a year to display",
+               #             choices = df$YEAR[1:8],
+               #             selected = df$YEAR[1:1]),
+               sliderInput("scatter_var", 
+                           label = "Current Year:",
+                           min = 2014, max = 2021, value = 2014),
                style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
         ),
         column(8,

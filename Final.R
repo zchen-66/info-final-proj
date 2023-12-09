@@ -3,6 +3,7 @@ library(dplyr)
 library(stringr)
 library(ggplot2)
 library(ggrepel)
+library(ggpubr)
 
 # ----------------- DATA WRANGLING ------------------------ #
 
@@ -347,7 +348,9 @@ make_scatter <- function(choice, year) {
     geom_text_repel(aes(label = state_name), size = 3, na.rm=TRUE) + 
     xlab("Average PM10 Level") +
     ylab("Respiratory Death Rate") +
-    geom_abline(intercept = mean(df_scatter$avg_pm10, na.rm=TRUE))
+    geom_smooth(method='lm', se= FALSE) +
+    stat_cor(label.x = 3, label.y = 32, p.accuracy = 0.001, r.accuracy = 0.01)
+    # geom_abline(intercept = mean(df_scatter$avg_pm10, na.rm=TRUE))
 
   if (choice != "avg_pm10") {
     if (choice == "avg_pm25") {
@@ -356,14 +359,18 @@ make_scatter <- function(choice, year) {
         geom_text_repel(aes(label = state_name), size = 3, na.rm=TRUE) + 
         xlab("Average PM2.5 Level") +
         ylab("Respiratory Death Rate") + 
-        geom_abline(intercept=30)
+        geom_smooth(method='lm', se= FALSE) + 
+        stat_cor(label.x = 3, label.y = 32, p.accuracy = 0.001, r.accuracy = 0.01)
+        # geom_abline(intercept=30)
     } else {
       p <- ggplot(data=df_scatter, aes(x=avg_no2, y=RATE)) + 
         geom_point(na.rm=TRUE) +
         geom_text_repel(aes(label = state_name), size = 3, na.rm=TRUE) + 
         xlab("Average NO2 Level") +
         ylab("Respiratory Death Rate") + 
-        geom_abline(intercept=25)
+        geom_smooth(method='lm', se= FALSE) +
+        stat_cor(label.x = 3, label.y = 32, p.accuracy = 0.001, r.accuracy = 0.01)
+        # geom_abline(intercept=25)
     }
   }
   

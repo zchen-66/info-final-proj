@@ -103,7 +103,7 @@ line_plot <- fluidPage(
                 class = "btn-primary"
               ), 
             ),
-            align="center",
+            align="left",
           ),
           plotOutput(outputId = "line"),
           htmlOutput(outputId = "pollutant_info")
@@ -126,37 +126,57 @@ interactive_map <- fluidPage(
       ),
       style = "padding-bottom: 50px"
   ),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("var", 
-                  label = "Choose a year to display",
-                  choices = df$YEAR[1:8],
-                  selected = df$YEAR[1:1]),
-      sliderInput("range", 
-                  label = "Range of interest:",
-                  min = 0, max = 70, value = c(0, 70)),
-      htmlOutput(outputId = "US_map_info")
-    ),
-    mainPanel(textOutput("choice_title"), tags$head(tags$style("#choice_title{font-size:25px;}")),
-              actionButton(
-                input = "USdeath",
-                label = "Death Rate"
-              ),
-              actionButton(
-                input = "USpm10",
-                label = "PM10"
-              ),
-              actionButton(
-                input = "USpm25",
-                label = "PM2.5"
-              ),
-              actionButton(
-                input = "USno2",
-                label = "NO2"
-              ),
-              plotOutput("map"),
-              htmlOutput(outputId = "US_info")
-    )
+  div(class="container",
+      style="font-family: 'Noto Sans'; color: #3d3d3d",
+      fluidRow(
+        column(4,
+               sliderInput("var", 
+                           label = "Current Year:",
+                           min = 2014, max = 2021, value = 2014),
+               sliderInput("range", 
+                           label = "Range of interest:",
+                           min = 0, max = 70, value = c(0, 70)),
+               htmlOutput(outputId = "US_map_info"),
+               style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
+        ),
+        column(8,
+               fluidRow(
+                 p(
+                   strong("Select type:"), 
+                   style = "font-size:15px; padding-bottom: 1px",
+                   actionButton(
+                     input = "USdeath",
+                     label = "Death Rate",
+                     style= "padding:4px; font-size:80%",
+                     class = "btn-primary"
+                   ),
+                   actionButton(
+                     input = "USpm10",
+                     label = "PM10",
+                     style= "padding:4px; font-size:80%",
+                     class = "btn-primary"
+                   ),
+                   actionButton(
+                     input = "USpm25",
+                     label = "PM2.5",
+                     style= "padding:4px; font-size:80%",
+                     class = "btn-primary"
+                   ),
+                   actionButton(
+                     input = "USno2",
+                     label = "NO2",
+                     style= "padding:4px; font-size:80%",
+                     class = "btn-primary"
+                   ),
+                   textOutput("choice_title"), 
+                   tags$head(tags$style("#choice_title{font-size:23px;}"))
+                 ),
+                 align="left"
+               ),
+               plotOutput(outputId = "map"),
+               htmlOutput(outputId = "US_info")
+        )
+      )
   )
 )
 
@@ -189,7 +209,7 @@ scatter_plot <- fluidPage(
         column(8,
                fluidRow(
                  p(
-                   strong("Select:"), 
+                   strong("Select air pollution type:"), 
                    style = "font-size:15px; padding-bottom: 1px",
                    actionButton(
                      input = "scatter_pm10",
@@ -209,8 +229,10 @@ scatter_plot <- fluidPage(
                      style= "padding:4px; font-size:80%",
                      class = "btn-primary"
                    ),
+                   textOutput("scatter_title"), 
+                   tags$head(tags$style("#scatter_title{font-size:23px;}"))
                  ),
-                 align="center"
+                 align="left"
                ),
                plotOutput(outputId = "scatter"),
                htmlOutput(outputId = "scatter_info")
@@ -324,14 +346,19 @@ server <- function(input, output) {
     scatter_choice = "avg_pm10"
   )
   
+  output$scatter_title <- renderText({paste("U.S. Respiratory Death Rate and Average PM10 Level in", input$scatter_var)})
+  
   observeEvent(input$scatter_pm10, {
     scatter_values$scatter_choice <- "avg_pm10"
+    output$scatter_title <- renderText({paste("U.S. Respiratory Death Rate and Average PM10 Level in", input$scatter_var)})
   }) 
   observeEvent(input$scatter_pm25, {
     scatter_values$scatter_choice <- "avg_pm25"
+    output$scatter_title <- renderText({paste("U.S. Respiratory Death Rate and Average PM2.5 Level in", input$scatter_var)})
   })
   observeEvent(input$scatter_no2, {
     scatter_values$scatter_choice <- "avg_no2"
+    output$scatter_title <- renderText({paste("U.S. Respiratory Death Rate and Average NO2 Level in", input$scatter_var)})
   })
   
   output$scatter <- renderPlot({

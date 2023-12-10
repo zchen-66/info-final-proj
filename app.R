@@ -88,7 +88,7 @@ line_plot <- fluidPage(
                 input = "pm10",
                 label = "PM10",
                 style= "padding:4px; font-size:80%",
-                class = "btn-primary"
+                class = "btn-primary",
               ),
               actionButton(
                 input = "pm25",
@@ -102,6 +102,8 @@ line_plot <- fluidPage(
                 style= "padding:4px; font-size:80%",
                 class = "btn-primary"
               ), 
+              textOutput("line_title"), 
+              tags$head(tags$style("#line_title{font-size:23px;}"))
             ),
             align="left",
           ),
@@ -130,9 +132,12 @@ interactive_map <- fluidPage(
       style="font-family: 'Noto Sans'; color: #3d3d3d",
       fluidRow(
         column(4,
+               tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
                sliderInput("var", 
                            label = "Current Year:",
+                           sep = "",
                            min = 2014, max = 2021, value = 2014),
+               tags$style(type = "text/css", ".irs-grid-pol.small {height: 4px;}"),
                sliderInput("range", 
                            label = "Range of interest:",
                            min = 0, max = 70, value = c(0, 70)),
@@ -185,7 +190,7 @@ interactive_map <- fluidPage(
 scatter_plot <- fluidPage(
   div(class = "test",
       h1(
-        strong("INTO THE DATA..."),
+        strong("INSIDE THE CORRELATION..."),
         style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
                 padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
                 letter-spacing: .2rem; color: #466378",
@@ -201,8 +206,10 @@ scatter_plot <- fluidPage(
                #             label = "Choose a year to display",
                #             choices = df$YEAR[1:8],
                #             selected = df$YEAR[1:1]),
+               tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
                sliderInput("scatter_var", 
                            label = "Current Year:",
+                           sep = "",
                            min = 2014, max = 2021, value = 2014),
                style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
         ),
@@ -262,15 +269,19 @@ server <- function(input, output) {
   values <- reactiveValues(
     pollutant_type = "avg_pm10"
   )
+  output$line_title <- renderText({sprintf("Respiratory Death Rate and PM10 Level over time in %s", input$state_name)})
   
   observeEvent(input$pm10, {
     values$pollutant_type <- "avg_pm10"
+    output$line_title <- renderText({sprintf("Respiratory Death Rate and PM10 Level over time in %s", input$state_name)})
   }) 
   observeEvent(input$pm25, {
     values$pollutant_type <- "avg_pm25"
+    output$line_title <- renderText({sprintf("Respiratory Death Rate and PM2.5 Level over time in %s", input$state_name)})
   })
   observeEvent(input$no2, {
     values$pollutant_type <- "avg_no2"
+    output$line_title <- renderText({sprintf("Respiratory Death Rate and NO2 Level over time in %s", input$state_name)})
   })
   
   output$state_info <- renderUI({

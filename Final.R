@@ -34,6 +34,7 @@ new_air_df <- summarize(
 df <- merge(x=deaths_df, y=new_air_df, by.x=c("state_name", "YEAR"), by.y=c("state_name", "year"), all.x=TRUE)
 df <- subset(df, select=c(-URL))
 df <- filter(df, YEAR != 2005)
+df <- df[-64,]
 
 # Get rid of comma in numbers
 df$"DEATHS" <- ifelse(str_detect(df$"DEATHS", ","), str_remove(df$"DEATHS", ","),df$"DEATHS")
@@ -189,25 +190,46 @@ state_over_time_linechart <- function(state, type){
   state_df <- filter(df, state_name == state)
   coeff <- mean(state_df[,type]) / mean(state_df[, "RATE"])
   
+  NA_PLOT <- ggplot() +
+    theme_classic() +
+    theme(plot.title = element_text(size=22, hjust = 0.5),
+        plot.background = element_rect(fill= '#ebf6fa'),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank(),
+        # panel.border = element_rect(color='black', fill=NA),
+        panel.background = element_rect(fill = 'white')) +
+    annotate(geom="text", x = 1, y = 1,label="NO DATA AVAILABLE", color="red")
+  
   if(type == "avg_pm10"){
+    if (is.na(state_df[1,type])){
+      return(NA_PLOT)
+    }
     name <- "PM10"
   }
   if(type == "avg_pm25"){
+    if (is.na(state_df[1,type])){
+      return(NA_PLOT)
+    }
     name <- "PM2.5"
   }
   if(type == "avg_no2"){
+    if (is.na(state_df[1,type])){
+      return(NA_PLOT)
+    }
     name <- "NO2"
   }
 
-  linechart <- ggplot(data = state_df, aes(x=YEAR)) +
-    geom_line( aes(y=RATE, color = "Respiratory Death Rate"), size = 1) +
-    geom_point(aes(y=RATE, text=RATE), color = "blue", shape = 17, size = 2) +
-    geom_line( aes(y=eval(parse(text=type)) / coeff, text=round(eval(parse(text=type)), 2), color = sprintf("%s Level", name)), size = 1) +
+  linechart <- ggplot(data = state_df, aes(x=YEAR), ) +
+    geom_line( aes(y=RATE, color = "Respiratory Death Rate"), size = 1, na.rm=TRUE) +
+    geom_point(aes(y=RATE, text=RATE), color = "blue", shape = 17, size = 2, na.rm=TRUE) +
+    geom_line( aes(y=eval(parse(text=type)) / coeff, text=round(eval(parse(text=type)), 2), color = sprintf("%s Level", name)), size = 1, na.rm=TRUE) +
     geom_point(
       aes(y=eval(parse(text=type)) / coeff),
-      color = "red", shape = 20, size = 2.5) +
-    labs(x="Year", color = "Legend",
-         title=sprintf(("Respiratory Death Rate and %s Level over time in %s"), name, state)) +
+      color = "red", shape = 20, size = 2.5, na.rm=TRUE) +
+    labs(x="Year", color = "Legend")+
+         #title=sprintf(("Respiratory Death Rate and %s Level over time in %s"), name, state)) +
     theme_classic() +
     theme(plot.title = element_text(size=22, hjust = 0.5),
           plot.background = element_rect(fill= '#ebf6fa'),
@@ -345,24 +367,39 @@ make_scatter <- function(choice, year) {
   
   p <- ggplot(data=df_scatter, aes(x=avg_pm10, y=RATE)) + 
     xlab("Average PM10 Level") +
-    ylab("Respiratory Death Rate")
+    ylab("Respiratory Death Rate") + 
+    stat_cor(label.x = (max(df_scatter$avg_pm10, na.rm=TRUE)-(max(df_scatter$avg_pm10, na.rm=TRUE)-min(df_scatter$avg_pm10, na.rm=TRUE))/2)-2.5,
+             label.y =73, p.accuracy = 0.001, r.accuracy = 0.01, na.rm=TRUE)
   
   if (choice != "avg_pm10") {
     if (choice == "avg_pm25") {
       p <- ggplot(data=df_scatter, aes(x=avg_pm25, y=RATE)) + 
         xlab("Average PM2.5 Level") +
-        ylab("Respiratory Death Rate")
+        ylab("Respiratory Death Rate") +
+        stat_cor(label.x = (max(df_scatter$avg_pm25, na.rm=TRUE)-(max(df_scatter$avg_pm25, na.rm=TRUE)-min(df_scatter$avg_pm25, na.rm=TRUE))/2)-0.25, 
+                 label.y = 73, p.accuracy = 0.001, r.accuracy = 0.01, na.rm=TRUE)
     } else {
       p <- ggplot(data=df_scatter, aes(x=avg_no2, y=RATE)) + 
         xlab("Average NO2 Level") +
-        ylab("Respiratory Death Rate")
+        ylab("Respiratory Death Rate") + 
+        stat_cor(label.x = (max(df_scatter$avg_no2, na.rm=TRUE)-(max(df_scatter$avg_no2, na.rm=TRUE)-min(df_scatter$avg_no2, na.rm=TRUE))/2)-2.5, 
+                 label.y = 73, p.accuracy = 0.001, r.accuracy = 0.01, na.rm=TRUE)
     }
   }
   
   p <- p + geom_smooth(method='lm', se= FALSE, na.rm=TRUE) +
-    geom_point(na.rm=TRUE) +
-    geom_text_repel(aes(label = state_name), size = 3, na.rm=TRUE) + 
-    stat_cor(label.x = 3, label.y = 29, p.accuracy = 0.001, r.accuracy = 0.01, na.rm=TRUE)
+    geom_point(aes(color = state_name), na.rm=TRUE) +
+    geom_text_repel(aes(label = state_name), size = 3, na.rm=TRUE) +
+    theme_classic() +
+    theme(
+          plot.background = element_rect(fill= '#ebf6fa'),
+          panel.grid.minor.x = element_line(color='black', size=0.05),
+          panel.grid.major.x = element_line(color='black', size=0.25),
+          panel.grid.minor.y = element_line(color='black', size=0.05),
+          panel.grid.major.y = element_line(color='black', size=0.25),
+          panel.background = element_rect(fill = 'white'),
+          legend.position = "none")
+    
   
   return(p)
 }

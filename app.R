@@ -251,7 +251,7 @@ scatter_plot <- fluidPage(
 # -------------------------------------------------------------------------
 
 
-ui <- navbarPage(
+ui <- tabsetPanel(
   br(),
   br(),
   tabPanel("Intro Page", home_page),

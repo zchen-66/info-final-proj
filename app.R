@@ -5,7 +5,6 @@ library(fmsb)
 library(plotly)
 library(maps)
 library(mapproj)
-
 source("Final.R")
 
 #Load in dataset (DO NOT CHANGE)
@@ -14,37 +13,61 @@ avg_air_quality_df <- read.csv("avg_air_quality_df.csv")
 
 # Define UI ----
 home_page <- fluidPage(
-  # setBackgroundColor("lightblue"),
-  # tags$style(
-  #   HTML(
-  #     "
-  #     body {
-  #       margin: 0;
-  #       background-image: url(smoky.png);
-  #       background-position: center;
-  #       background-size: cover;
-  #       height: 100vh;
-  #     }
-  #     #container {
-  #       width: 100%;
-  #       height: 100%;
-  #       display: flex;
-  #       flex-direction: column;
-  #       justify-content: center;
-  #       align-items: center;
-  #     }"
-  #   )
-  # ),
-  div(
-    id = "container",
-    title <- h1("How does air pollution and deaths caused by respiratory diseases relate?", style = "color:black"),
-    description <- h4("In this project, we will be exploring and analyzing the correlations between the United 
-                States respiratory deaths and air quality. Our goal through this analysis is to bring more concern to 
-                air pollution and create awareness on the exact numerical impact it has.
-                This dataset contains data about the amount of respiratory deaths and air 
-                 quality (pm10, pm2.5, and no2 concentration) per U.S. State per year (from 2014-2021).", style = "color:#A020F0")
-  )
+  setBackgroundColor("#ebf6fa"),
+  h1(
+    strong("Examining the Correlation Between Air Pollution and Mortality Due to Respiratory Diseases: A Comprehensive Data Analysis"),
+    style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                letter-spacing: .2rem; color: #466378",
+    align = "center"
+  ),
+  style = "padding-bottom: 50px" ,
+  br(), 
+  br(),
+  img(src = "collage.jpg", height = 475, width = 875, style="display: block; margin-left: auto; margin-right: auto;"),
+  br(),
+  br(),
+  h2(
+    strong("Unraveling Insights and Trends"),
+    style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                  padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 20pt;
+                  letter-spacing: .2rem; color: #466378",
+    align = "center"
+  ),
+  style = "padding-bottom: 50px" ,
+  br(),
+  p("Welcome to our website dedicated to unraveling the critical link between air quality and respiratory deaths. In an era overshadowed by climate",
+    br(),
+    "change concerns, our project, led by Jack Scott, Andrew Chen, and Aarfan Hussain under Prof. Julia Deeb-Swihart, explores the relationship between",
+    br(),
+    "air pollution and respiratory illnesses from 2014 to 2019 in the U.S. Leveraging data from the World Health Organization and the U.S. government,",
+    br(),
+    "we aim to demonstrate the urgent connection between escalating air pollution and rising respiratory deaths. By analyzing PM10, PM2.5, and NO2",
+    br(),
+    "concentrations alongside respiratory death counts, categorized by specific causes, we seek to uncover compelling trends. Join us in understanding",
+    br(),
+    "the pressing implications of this critical issue, advocating for timely action to mitigate risks and foster a healthier future. Explore our",
+    br(),
+    "specifclly collected datasets from the WHO Ambient Air Quality Database and the CDC’s National Vital Statistics System for an in-depth",
+    br(),
+    "exploration of this crucial intersection.", style = "text-align:center; color:black"),
+  br(),
+  br(),
+  #HTML('<iframe width="560" height="315" src= "
+ # https://drive.google.com/file/d/1DYNTpYiQAlbl2CyoOYwmYD3B-U0W6eq-/view?usp=sharing" frameborder="0" 
+  #allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
+ tabPanel(
+   "About",
+   mainPanel(
+     style = "text-align: center;",
+     uiOutput("video"),
+     width = 20
+     
+   )
+ )
+  
 )
+  
 
 line_plot <- fluidPage(
   theme = bslib::bs_theme(version = 5),
@@ -152,7 +175,7 @@ interactive_map <- fluidPage(
                    actionButton(
                      input = "USdeath",
                      label = "Death Rate",
-                     style= "padding:4px; font-size:80%",
+                     style = "padding:4px; font-size:80%",
                      class = "btn-primary"
                    ),
                    actionButton(
@@ -264,8 +287,9 @@ ui <- tabsetPanel(
 
 # Define server logic ----
 server <- function(input, output) {
-  
-  
+  output$video <- renderUI({
+    tags$video(src = "vid.mp4", type = "video/mp4", autoplay = NA, controls = NA)
+  })
   values <- reactiveValues(
     pollutant_type = "avg_pm10"
   )

@@ -14,57 +14,160 @@ avg_air_quality_df <- read.csv("avg_air_quality_df.csv")
 # Define UI ----
 home_page <- fluidPage(
   setBackgroundColor("#ebf6fa"),
-  h1(
-    strong("Examining the Correlation Between Air Pollution and Mortality Due to Respiratory Diseases: A Comprehensive Data Analysis"),
-    style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
-                padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
-                letter-spacing: .2rem; color: #466378",
-    align = "center"
+  div(
+        h1(
+          strong("Examining the Correlation Between Air Pollution and Mortality Due to Respiratory Diseases: A Comprehensive Data Analysis"),
+          style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                    padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 18pt;
+                    letter-spacing: .2rem; color: #466378",
+          align = "center"
+        ),
+        style = "padding-bottom: 50px" ,
+        br(), 
+        br(),
+        img(src = "collage.jpg", height = 475, width = 875, style="display: block; margin-left: auto; margin-right: auto;"),
   ),
-  style = "padding-bottom: 50px" ,
-  br(), 
-  br(),
-  img(src = "collage.jpg", height = 475, width = 875, style="display: block; margin-left: auto; margin-right: auto;"),
-  br(),
-  br(),
-  h2(
-    strong("Unraveling Insights and Trends"),
-    style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
-                  padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 20pt;
-                  letter-spacing: .2rem; color: #466378",
-    align = "center"
+  div(
+        h1(
+          strong("EXPOSITION"),
+          style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                      padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                      letter-spacing: .2rem; color: #466378",
+          align = "center"
+        ),
+        style = "padding-bottom: 30px" ,
+        br(),
+        div(
+          p("Welcome to our website dedicated to unraveling the critical link between air 
+        quality and respiratory deaths. In an era overshadowed by climatechange concerns, 
+        our project, led by Jack Scott, Andrew Chen, and Aarfan Hussain under Prof. 
+        Julia Deeb-Swihart, explores the relationship between air pollution and respiratory 
+        illnesses from 2014 to 2019 in the U.S. Leveraging data from the World Health 
+        Organization and the U.S. government,we aim to demonstrate the urgent connection 
+        between escalating air pollution and rising respiratory deaths. By analyzing PM10, 
+        PM2.5, and NO2 concentrations alongside respiratory death counts, categorized by 
+        specific causes, we seek to uncover compelling trends. Join us in understandingthe 
+        pressing implications of this critical issue, advocating for timely action to mitigate 
+        risks and foster a healthier future. Explore our specificlly collected datasets from 
+        the WHO Ambient Air Quality Database and the CDC’s National Vital Statistics System 
+        for an in-depth exploration of this crucial intersection.", 
+            style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
+          style = "margin-right: 50px; margin-left: 50px; text-align: justify"
+        ),
   ),
-  style = "padding-bottom: 50px" ,
-  br(),
-  p("Welcome to our website dedicated to unraveling the critical link between air quality and respiratory deaths. In an era overshadowed by climate",
-    br(),
-    "change concerns, our project, led by Jack Scott, Andrew Chen, and Aarfan Hussain under Prof. Julia Deeb-Swihart, explores the relationship between",
-    br(),
-    "air pollution and respiratory illnesses from 2014 to 2019 in the U.S. Leveraging data from the World Health Organization and the U.S. government,",
-    br(),
-    "we aim to demonstrate the urgent connection between escalating air pollution and rising respiratory deaths. By analyzing PM10, PM2.5, and NO2",
-    br(),
-    "concentrations alongside respiratory death counts, categorized by specific causes, we seek to uncover compelling trends. Join us in understanding",
-    br(),
-    "the pressing implications of this critical issue, advocating for timely action to mitigate risks and foster a healthier future. Explore our",
-    br(),
-    "specifclly collected datasets from the WHO Ambient Air Quality Database and the CDC’s National Vital Statistics System for an in-depth",
-    br(),
-    "exploration of this crucial intersection.", style = "text-align:center; color:black"),
-  br(),
-  br(),
-  #HTML('<iframe width="560" height="315" src= "
- # https://drive.google.com/file/d/1DYNTpYiQAlbl2CyoOYwmYD3B-U0W6eq-/view?usp=sharing" frameborder="0" 
-  #allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'),
- tabPanel(
-   "About",
-   mainPanel(
-     style = "text-align: center;",
-     uiOutput("video"),
-     width = 20
-     
-   )
- )
+  div(
+        h1(
+          strong("THE DATA"),
+          style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                              padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                              letter-spacing: .2rem; color: #466378",
+          align = "center"
+        ),
+        div(
+          fluidRow(
+            column(4,
+                   h3(
+                     img(src = "line.png", height = 275, width = 275, style="display: block; margin-left: auto; margin-right: auto;
+                         align = 'center'"),
+                     div(
+                       strong("OVER THE YEARS"), style = "font-family: 'Questrial';  margin: auto; font-size: 20pt; color: 'black'; 
+                       padding-top: 10px",
+                       align = "center",
+                       p(
+                         "Through analyzing the data within a lineplot, it allows us to see and analyze the trends and patterns within
+                         many categories of the data over time.",
+                         style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d; font-size: 12pt; 
+                         margin-left: 50px; margin-right: 50px; line-height: 1.5em" 
+                       ),
+                       actionButton(
+                         inputId = "to_line",
+                         label = "View Lineplot »",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                     ),
+                     
+                   ),
+            ),
+            column(4,
+                   h3(
+                     img(src = "map.png", height = 275, width = 275, style="display: block; margin-left: auto; margin-right: auto;
+                         align = 'center'"),
+                     div(
+                       strong("BETWEEN THE STATES"), style = "font-family: 'Questrial';  margin: auto; font-size: 20pt; color: 'black'; 
+                       padding-top: 10px",
+                       align = "center",
+                       p(
+                         "Through analyzing the data in the format of a graph, it allows us to compare and contrasts the different
+                         data types between each of the 50 states.",
+                         style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d; font-size: 12pt; 
+                         margin-left: 50px; margin-right: 50px; line-height: 1.5em" 
+                       ),
+                       actionButton(
+                         inputId = "to_map",
+                         label = "View Map »",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                     ),
+                     
+                   ),
+            ),
+            column(4,
+                   h3(
+                     img(src = "scatter.png", height = 275, width = 275, style="display: block; margin-left: auto; margin-right: auto;
+                         align = 'center'"),
+                     div(
+                       strong("INSIDE THE CORRELATION"), style = "font-family: 'Questrial';  margin: auto; font-size: 20pt; color: 'black'; 
+                       padding-top: 10px",
+                       align = "center",
+                       p(
+                         "Through analyzing the data within a scatterplot, it allows us to identify the strength of the different correlations
+                         and analyze the correlations themselves to compare the air pollutants.",
+                         style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d; font-size: 12pt; 
+                         margin-left: 50px; margin-right: 50px; line-height: 1.5em" 
+                       ),
+                       actionButton(
+                         inputId = "to_scatter",
+                         label = "View Scatterplot »",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                     ),
+                   ),
+            )
+          ),
+          style = "padding-top: 15px; padding-bottom: 30px"
+        )
+  ),
+  div(
+        h1(
+          strong("CONCLUSION"),
+          style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                          padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                          letter-spacing: .2rem; color: #466378",
+          align = "center"
+        ),
+        style = "padding-bottom: 30px" ,
+        br(),
+        div(
+          p("JACK PLS CARRY ME WRITE THIS THANK YOU AHHHHHHHHHHHHHHHHHHHH", 
+            style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
+          style = "margin-right: 50px; margin-left: 50px; text-align: justify"
+        ),
+  ),
+  
+  div(
+        tabPanel(
+          "About",
+          mainPanel(
+            style = "text-align: center;",
+            uiOutput("video"),
+            width = 20
+            
+          )
+        )
+  )
   
 )
   
@@ -268,31 +371,82 @@ scatter_plot <- fluidPage(
                htmlOutput(outputId = "scatter_info")
         )
       )
+  ),
+  div(
+    h1(
+      strong("Analysis"),
+      style = "font-family: 'Questrial'; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 18pt;
+                letter-spacing: .2rem; color: #466378",
+      align = "center"
+    ),
+    p(
+      HTML("One of the first things we learned about in any statistics class is that 
+      causation CANNOT be proven through correlation, which means that none of 
+      this data can be used to prove the effect of air pollutants on respiratory 
+      death rates. Please keep this in mind as you read through the rest of the 
+      analysis. <br/><br/>First off, none of the graphs have a r-value greater than 0.5, 
+      which means none of the graphs have a stronger than moderate correlation 
+      between the air pollution particulate and the state respiratory death rate.
+      This is most likely due to respiratory death rate being caused by many 
+      other factors aside from pollution particulates, such as other genetics-related 
+      chronic diseases. <br/><br/>This also means that we can only be up to 25% 
+      (r^2 value of 0.25 maximum) confident that the air pollutant rate is 
+      positively (or negatively, in the case of no2) correlated with the 
+      respiratory death rate.<br/><br/>With that said, among the three types of air 
+      pollution particulate matter, PM2.5 seems to have the highest correlation 
+      with respiratory death rate. With the null hypothesis of there being no 
+      correlation between air pollution levels and respiratory deaths, most of 
+      the PM2.5 graphs (specifically, years 2014, 2016, 2017, and 2021) produced 
+      a p-value that is less than 0.05, meaning that we can safely reject the 
+      null hypothesis, thus proving that there is statistically significant 
+      positive correlation between the PM2.5 levels and Respiratory deaths. 
+      <br/><br/>However, this is not the case with any of the other PM10 or NO2 graphs,
+      as none of their respective p-values on the graphs are less than 0.05, 
+      therefore we cannot safely conclude that there is a correlation between 
+      those air pollutants and respiratory deaths. In fact, despite being very 
+      weak, the NO2 graphs actually produced negative correlations between air 
+      pollutant levels and respiratory death rate. This may just be due to the 
+      unpredictable nature of the dataset."),
+      style = "text-align:left, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
+    style = "margin-right: 50px; margin-left: 50px; margin-top: 100px; text-align: left"
   )
 )
 
 # -------------------------------------------------------------------------
 
 
-ui <- tabsetPanel(
+ui <- tabsetPanel( id = "tabs",
   br(),
   br(),
-  tabPanel("Intro Page", home_page),
-  tabPanel("Line Plot", line_plot),
-  tabPanel("Map of the States", interactive_map),
-  tabPanel("Scatter Plot", scatter_plot)
+  tabPanel("Intro & Context", value = "intro_page", home_page),
+  tabPanel("Line Plot", value = "lineplot_page", line_plot),
+  tabPanel("US Map", value = "map_page", interactive_map),
+  tabPanel("Scatter Plot", value = "scatter_page", scatter_plot)
 )
 
 # -------------------------------------------------------------------------
 
 # Define server logic ----
-server <- function(input, output) {
+server <- function(input, output, session) {
+  
+  observeEvent(input$to_line ,{
+    updateTabsetPanel(session, "tabs", selected = "lineplot_page")
+  })
+  observeEvent(input$to_map ,{
+    updateTabsetPanel(session, "tabs", selected = "map_page")
+  })
+  observeEvent(input$to_scatter ,{
+    updateTabsetPanel(session, "tabs", selected = "scatter_page")
+  })
+  
   output$video <- renderUI({
     tags$video(src = "vid.mp4", type = "video/mp4", autoplay = NA, controls = NA)
   })
+  
   values <- reactiveValues(
     pollutant_type = "avg_pm10"
   )
+  
   output$line_title <- renderText({sprintf("Respiratory Death Rate and PM10 Level over time in %s", input$state_name)})
   
   observeEvent(input$pm10, {
@@ -406,4 +560,4 @@ server <- function(input, output) {
 }
 
 # Run the app ----
-shinyApp(ui = ui, server = server)
+shinyApp(ui, server)

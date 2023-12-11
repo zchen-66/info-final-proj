@@ -1,3 +1,5 @@
 TODO LIST (for Andrew)
-- main page design
 - add ap stats regression analysis paragraph
+- conclusion
+- 3 part buttons
+- exposition text spaced out

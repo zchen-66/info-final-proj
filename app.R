@@ -39,17 +39,18 @@ home_page <- fluidPage(
         br(),
         div(
           p("Welcome to our website dedicated to unraveling the critical link between air 
-        quality and respiratory deaths. In an era overshadowed by climatechange concerns, 
+        quality and respiratory deaths. In an era overshadowed by climate change concerns, 
         our project, led by Jack Scott, Andrew Chen, and Aarfan Hussain under Prof. 
-        Julia Deeb-Swihart, explores the relationship between air pollution and respiratory 
-        illnesses from 2014 to 2019 in the U.S. Leveraging data from the World Health 
-        Organization and the U.S. government,we aim to demonstrate the urgent connection 
-        between escalating air pollution and rising respiratory deaths. By analyzing PM10, 
-        PM2.5, and NO2 concentrations alongside respiratory death counts, categorized by 
-        specific causes, we seek to uncover compelling trends. Join us in understandingthe 
+        Julia Deeb-Swihart, explores the relationship between air pollution and chronic lower 
+        respiratory diseases (chronic obstructive pulmonary disease (COPD), chronic bronchitis, 
+        emphysema, and asthma) from 2014 to 2021 in the United States. Leveraging data from the 
+        World Health Organization and the U.S. government, we aim to demonstrate the urgent 
+        connection between escalating air pollution and rising respiratory deaths. By analyzing 
+        PM10, PM2.5, and NO2 concentrations alongside respiratory death counts, categorized by 
+        specific causes, we seek to uncover compelling trends. Join us in understanding the 
         pressing implications of this critical issue, advocating for timely action to mitigate 
         risks and foster a healthier future. Explore our specificlly collected datasets from 
-        the WHO Ambient Air Quality Database and the CDC’s National Vital Statistics System 
+        the WHO Ambient Air Quality Database and the CDC’s National Center for Health Statistics 
         for an in-depth exploration of this crucial intersection.", 
             style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
           style = "margin-right: 50px; margin-left: 50px; text-align: justify"
@@ -98,7 +99,7 @@ home_page <- fluidPage(
                        padding-top: 10px",
                        align = "center",
                        p(
-                         "Through analyzing the data in the format of a graph, it allows us to compare and contrasts the different
+                         "Through analyzing the data in the format of a map, it allows us to compare and contrast the different
                          data types between each of the 50 states.",
                          style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d; font-size: 12pt; 
                          margin-left: 50px; margin-right: 50px; line-height: 1.5em" 
@@ -151,7 +152,24 @@ home_page <- fluidPage(
         style = "padding-bottom: 30px" ,
         br(),
         div(
-          p("JACK PLS CARRY ME WRITE THIS THANK YOU AHHHHHHHHHHHHHHHHHHHH", 
+          p("After reading through our pages, we hope for you to come to the conclusion of how 
+            our world is heavily impacted by ourselves. Through the ever-prevalent danger that 
+            air pollution has over us, it impacts our day-to-day lives and could even be a cause 
+            of death for some people. While overtime respiratory death rates continue to get 
+            better and air pollution levels decrease, it is still a very important task to make 
+            sure that these rates keep decreasing, so that we can have a future with clean air, 
+            where no one gets illnesses because of polluted air. It is the right of every human 
+            being to make sure that our children and their future children grow up being happy 
+            and healthy, and to make sure that they can breathe fresh air. We hope our readers 
+            to have a better understanding of how air quality and respiratory death rates may 
+            be correlated, and to keep that in mind when natural disasters like wildfires  
+            happen (which produce more PM10 and PM2.5) they can affect people in ways you might 
+            have not thought about before. Tiny things like PM10 and PM2.5 can lead to a whole 
+            variety of big and bad health effects. We want our readers to think about the impact 
+            that they cause in regards to air pollution. Because cars produce a sizable amount 
+            of air pollution, try carpooling more often, or do other small things to help the 
+            fight against air pollution. In conclusion, make sure that you stay healthy, and 
+            to help contribute to a better future by decreasing air pollution.", 
             style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
           style = "margin-right: 50px; margin-left: 50px; text-align: justify"
         ),
@@ -167,220 +185,322 @@ home_page <- fluidPage(
             
           )
         )
-  )
-  
-)
-  
-
-line_plot <- fluidPage(
-  theme = bslib::bs_theme(version = 5),
-  tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "site.css")
   ),
-  setBackgroundColor("#ebf6fa"),
-  HTML('<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Questrial&display=swap" rel="stylesheet">'),
-  div(class = "test",
+  
+  div(
+    br(),
+    br(),
     h1(
-      strong("OVER THE YEARS..."),
+      strong("SOURCES"),
       style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
-                padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
-                letter-spacing: .2rem; color: #466378",
+                          padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                          letter-spacing: .2rem; color: #466378",
       align = "center"
     ),
-    style = "padding-bottom: 50px"
+    style = "padding-bottom: 30px" ,
+    br(),
+    div(
+      p(HTML("CDC Chronic Lower Respiratory Disease Mortality by State: https://www.cdc.gov/nchs/pressroom/sosmap/lung_disease_mortality/lung_disease.htm
+      <br></br>WHO Ambient Air Quality Database: https://www.who.int/data/gho/data/themes/air-pollution/who-air-quality-database"), 
+        style = "text-align:justify, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
+      style = "margin-right: 50px; margin-left: 50px; text-align: justify"
+    ),
+  )
+)
+  
+# -------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------
+
+
+ui <- tabsetPanel( id = "tabs",
+  br(),
+  br(),
+  tabPanel(
+    "Intro & Context", 
+    value = "intro_page", 
+    home_page
   ),
-  div(class="container",
-    style="font-family: 'Noto Sans'; color: #3d3d3d",
-    fluidRow(
-        column(4,
-          selectInput(
-            inputId = "state_name",
-            label = "Select State",
-            choices = df$state_name,
-            selected = 1
+  tabPanel(
+    "Line Plot", 
+    value = "lineplot_page", 
+    fluidPage(
+      tags$head(
+        tags$link(rel = "stylesheet", type = "text/css", href = "site.css")
+      ),
+      setBackgroundColor("#ebf6fa"),
+      HTML('<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Questrial&display=swap" rel="stylesheet">'),
+      div(class = "test",
+          h1(
+            strong("OVER THE YEARS..."),
+            style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+                padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
+                letter-spacing: .2rem; color: #466378",
+            align = "center"
           ),
-          htmlOutput(outputId = "state_info"),
-          br(),
-          style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
-        ),
-        column(8,
+          style = "padding-bottom: 50px"
+      ),
+      div(class="container",
+          style="font-family: 'Noto Sans'; color: #3d3d3d",
           fluidRow(
-            p(
-              strong("Select air pollution type:"), 
-              style = "font-size:15px; padding-bottom: 1px",
-              actionButton(
-                input = "pm10",
-                label = "PM10",
-                style= "padding:4px; font-size:80%",
-                class = "btn-primary",
-              ),
-              actionButton(
-                input = "pm25",
-                label = "PM2.5",
-                style= "padding:4px; font-size:80%",
-                class = "btn-primary"
-              ),
-              actionButton(
-                input = "no2",
-                label = "NO2",
-                style= "padding:4px; font-size:80%",
-                class = "btn-primary"
-              ), 
-              textOutput("line_title"), 
-              tags$head(tags$style("#line_title{font-size:23px;}"))
+            column(3,
+                   selectInput(
+                     inputId = "state_name",
+                     label = "Select State",
+                     choices = df$state_name,
+                     selected = 1
+                   ),
+                   htmlOutput(outputId = "state_info"),
+                   br(),
+                   style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
             ),
-            align="left",
-          ),
-          plotOutput(outputId = "line"),
-          htmlOutput(outputId = "pollutant_info")
-        )
+            column(9,
+                   fluidRow(
+                     p(
+                       strong("Select air pollution type:"), 
+                       style = "font-size:15px; padding-bottom: 1px; padding-left: 15px",
+                       actionButton(
+                         input = "pm10",
+                         label = "PM10",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary",
+                       ),
+                       actionButton(
+                         input = "pm25",
+                         label = "PM2.5",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                       actionButton(
+                         input = "no2",
+                         label = "NO2",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ), 
+                       textOutput("line_title"), 
+                       tags$head(tags$style("#line_title{font-size:23px; padding-left: 15px}"))
+                     ),
+                     align="left",
+                   ),
+                   plotOutput(outputId = "line"),
+                   htmlOutput(outputId = "pollutant_info")
+            )
+          )
+      ),
+      div(
+        h1(
+          strong(HTML("Analysis<br/><br/>Data Story: Change Over Time (Trends) and Contrast")),
+          style = "font-family: 'Questrial'; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 18pt;
+                letter-spacing: .2rem; color: #466378",
+          align = "center"
+        ),
+        p(
+          HTML("Starting off, it is very important to see how each individual U.S. state changes 
+      over time. It helps understand whether or not there is a connection between the respiratory 
+      death rate of a state and it's pollution levels. As you can see, there seems to be a slight 
+      amount of correlation between death rate and pollution levels. In some cases, it seems to 
+      be not correlated at all, for example Colorado's PM2.5 levels and its death rate. In other 
+      states cases, there is a strong correlation, for example Maine's death rate and PM10 levels.
+      <br/><br/>I believe that this difference can be attributed to our datasets. Like mentioned 
+      in our other pages, the air quality data may have been gathered from not enough places to 
+      properly represent the actual air pollution levels in a given state. This would result in 
+      states like Colorado seemingly contradicting itself.<br/><br/>This could also be the reason 
+      why there are pollution values that are missing, like how many states do not have NO2 data.
+      <br/><br/>It is also interesting to note how PM10 lines and PM2.5 lines are usually very 
+      similar to each other, and follow the same trend. This is most likely because PM10 and 
+      PM2.5 come from most of the same sources, and an increase in a certain source would lead 
+      to both PM10 and PM2.5 levels increasing. On that note, it is also important to take into 
+      account natural disasters or special events that effects the data in some way. For example, 
+      in 2018 California has a pretty big spike of PM10 and PM2.5 levels, which is most likely 
+      due to the 2018 California wildfires, which produced heavy amounts of smoke and with it 
+      most likely an increase in PM10 and PM2.5 levels."),
+          style = "text-align:left, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
+        style = "margin-right: 50px; margin-left: 50px; margin-top: 100px; text-align: left"
       )
     )
-)
-
-# -------------------------------------------------------------------------
-
-
-interactive_map <- fluidPage(
-  div(class = "test",
-      h1(
-        strong("ACROSS THE STATES..."),
-        style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+  ),
+  tabPanel(
+    "US Map", 
+    value = "map_page", 
+    fluidPage(
+      div(class = "test",
+          h1(
+            strong("ACROSS THE STATES..."),
+            style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
                 padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
                 letter-spacing: .2rem; color: #466378",
-        align = "center"
+            align = "center"
+          ),
+          style = "padding-bottom: 50px"
       ),
-      style = "padding-bottom: 50px"
-  ),
-  div(class="container",
-      style="font-family: 'Noto Sans'; color: #3d3d3d",
-      fluidRow(
-        column(4,
-               tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
-               sliderInput("var", 
-                           label = "Current Year:",
-                           sep = "",
-                           min = 2014, max = 2021, value = 2014),
-               tags$style(type = "text/css", ".irs-grid-pol.small {height: 4px;}"),
-               sliderInput("range", 
-                           label = "Range of interest:",
-                           min = 0, max = 70, value = c(0, 70)),
-               htmlOutput(outputId = "US_map_info"),
-               style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
+      div(class="container",
+          style="font-family: 'Noto Sans'; color: #3d3d3d",
+          fluidRow(
+            column(3,
+                   tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
+                   sliderInput("var", 
+                               label = "Current Year:",
+                               sep = "",
+                               min = 2014, max = 2021, value = 2014),
+                   tags$style(type = "text/css", ".irs-grid-pol.small {height: 4px;}"),
+                   sliderInput("range", 
+                               label = "Range of interest:",
+                               min = 0, max = 70, value = c(0, 70)),
+                   htmlOutput(outputId = "US_map_info"),
+                   style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
+            ),
+            column(9,
+                   fluidRow(
+                     p(
+                       strong("Select type:"), 
+                       style = "font-size:15px; padding-bottom: 1px; padding-left: 15px",
+                       actionButton(
+                         input = "USdeath",
+                         label = "Death Rate",
+                         style = "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                       actionButton(
+                         input = "USpm10",
+                         label = "PM10",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                       actionButton(
+                         input = "USpm25",
+                         label = "PM2.5",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                       actionButton(
+                         input = "USno2",
+                         label = "NO2",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                       textOutput("choice_title"), 
+                       tags$head(tags$style("#choice_title{font-size:23px; padding-left:15px}"))
+                     ),
+                     align="left"
+                   ),
+                   plotOutput(outputId = "map"),
+                   htmlOutput(outputId = "US_info")
+            )
+          )
+      ),
+      div(
+        h1(
+          strong(HTML("Analysis<br/><br/>Data Story: Change Over Time and Contrast")),
+          style = "font-family: 'Questrial'; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 18pt;
+                letter-spacing: .2rem; color: #466378",
+          align = "center"
         ),
-        column(8,
-               fluidRow(
-                 p(
-                   strong("Select type:"), 
-                   style = "font-size:15px; padding-bottom: 1px",
-                   actionButton(
-                     input = "USdeath",
-                     label = "Death Rate",
-                     style = "padding:4px; font-size:80%",
-                     class = "btn-primary"
-                   ),
-                   actionButton(
-                     input = "USpm10",
-                     label = "PM10",
-                     style= "padding:4px; font-size:80%",
-                     class = "btn-primary"
-                   ),
-                   actionButton(
-                     input = "USpm25",
-                     label = "PM2.5",
-                     style= "padding:4px; font-size:80%",
-                     class = "btn-primary"
-                   ),
-                   actionButton(
-                     input = "USno2",
-                     label = "NO2",
-                     style= "padding:4px; font-size:80%",
-                     class = "btn-primary"
-                   ),
-                   textOutput("choice_title"), 
-                   tags$head(tags$style("#choice_title{font-size:23px;}"))
-                 ),
-                 align="left"
-               ),
-               plotOutput(outputId = "map"),
-               htmlOutput(outputId = "US_info")
-        )
+        p(
+          HTML("As you can see, there is a large variance of the death rate, 
+      PM10 levels, PM2.5 levels, and NO2 levels between all of the states, 
+      with some states having a respiratory disease death rate of 20 deaths 
+      per 100,000 people, and some having a rate of 60. Because of this large 
+      variance, it is interesting to see how the states change over time. Going 
+      through 2014 to 2021, you can see how the death rates and pollution levels 
+      becomes better overtime. But, the data does not tell whether or not the 
+      death rate is decreasing because pollution is decreasing, it just shows the 
+      contrast between the states in a period of time.<br/><br/>This is because 
+      there are many factors that go into a state's respiratory death rate, with 
+      health care access and quality being a major factor. It is also interesting 
+      to see how some regions of the U.S. have a worse death rate or quality of 
+      air compared to other places. For example southeast U.S. primarily has the 
+      worst death rates compared to other regions.<br/><br/>There are also some 
+      N/A values in the datasets that we used, so there isn't always a PM10, 
+      PM2.5, or NO2 value for each state.<br/><br/>One other thing to notice is 
+      how some places have seemingly contradicting data, for example, Wyoming has 
+      a relatively high respiratory death rate, but very low PM10, PM2.5, and NO2 
+      levels. Like I mentioned previously, this is likely due to other factors, 
+      like access to healthcare and whatnot. This also may be caused by the air 
+      quality stations (which collected the data) in Wyoming may also be in rural 
+      locations, which would not provide the most accurate data that represents 
+      Wyoming as a whole."),
+          style = "text-align:left, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
+        style = "margin-right: 50px; margin-left: 50px; margin-top: 100px; text-align: left"
       )
-  )
-)
-
-# -------------------------------------------------------------------------
-
-scatter_plot <- fluidPage(
-  div(class = "test",
-      h1(
-        strong("INSIDE THE CORRELATION..."),
-        style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
+    )
+  ),
+  tabPanel(
+    "Scatter Plot", 
+    value = "scatter_page", 
+    fluidPage(
+      div(class = "test",
+          h1(
+            strong("INSIDE THE CORRELATION..."),
+            style = "font-family: 'Questrial'; border-bottom: 3px solid #37ad88; border-top: 3px solid #37ad88;
                 padding-top: 15px; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 24pt;
                 letter-spacing: .2rem; color: #466378",
-        align = "center"
+            align = "center"
+          ),
+          style = "padding-bottom: 50px"
       ),
-      style = "padding-bottom: 50px"
-  ),
-  div(class="container",
-      style="font-family: 'Noto Sans'; color: #3d3d3d",
-      fluidRow(
-        column(4,
-               # selectInput("scatter_var", 
-               #             label = "Choose a year to display",
-               #             choices = df$YEAR[1:8],
-               #             selected = df$YEAR[1:1]),
-               tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
-               sliderInput("scatter_var", 
-                           label = "Current Year:",
-                           sep = "",
-                           min = 2014, max = 2021, value = 2014),
-               style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
-        ),
-        column(8,
-               fluidRow(
-                 p(
-                   strong("Select air pollution type:"), 
-                   style = "font-size:15px; padding-bottom: 1px",
-                   actionButton(
-                     input = "scatter_pm10",
-                     label = "PM10",
-                     style= "padding:4px; font-size:80%",
-                     class = "btn-primary"
+      div(class="container",
+          style="font-family: 'Noto Sans'; color: #3d3d3d",
+          fluidRow(
+            column(3,
+                   # selectInput("scatter_var", 
+                   #             label = "Choose a year to display",
+                   #             choices = df$YEAR[1:8],
+                   #             selected = df$YEAR[1:1]),
+                   tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
+                   sliderInput("scatter_var", 
+                               label = "Current Year:",
+                               sep = "",
+                               min = 2014, max = 2021, value = 2014),
+                   style="border-right: 2px solid; padding-top: 100px; padding-bottom: 100px"
+            ),
+            column(9,
+                   fluidRow(
+                     p(
+                       strong("Select air pollution type:"), 
+                       style = "font-size:15px; padding-bottom: 1px; padding-left: 15px",
+                       actionButton(
+                         input = "scatter_pm10",
+                         label = "PM10",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                       actionButton(
+                         input = "scatter_pm25",
+                         label = "PM2.5",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                       actionButton(
+                         input = "scatter_no2",
+                         label = "NO2",
+                         style= "padding:4px; font-size:80%",
+                         class = "btn-primary"
+                       ),
+                       textOutput("scatter_title"), 
+                       tags$head(tags$style("#scatter_title{font-size:23px; padding-left:15px;}"))
+                     ),
+                     align="left"
                    ),
-                   actionButton(
-                     input = "scatter_pm25",
-                     label = "PM2.5",
-                     style= "padding:4px; font-size:80%",
-                     class = "btn-primary"
-                   ),
-                   actionButton(
-                     input = "scatter_no2",
-                     label = "NO2",
-                     style= "padding:4px; font-size:80%",
-                     class = "btn-primary"
-                   ),
-                   textOutput("scatter_title"), 
-                   tags$head(tags$style("#scatter_title{font-size:23px;}"))
-                 ),
-                 align="left"
-               ),
-               plotOutput(outputId = "scatter"),
-               htmlOutput(outputId = "scatter_info")
-        )
-      )
-  ),
-  div(
-    h1(
-      strong("Analysis"),
-      style = "font-family: 'Questrial'; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 18pt;
+                   plotOutput(outputId = "scatter"),
+                   htmlOutput(outputId = "scatter_info")
+            )
+          )
+      ),
+      div(
+        h1(
+          strong(HTML("Analysis<br/><br/>Data Story: Change Over Time (Trends)")),
+          style = "font-family: 'Questrial'; padding-bottom: 15px; width: 1200px; margin: auto; font-size: 18pt;
                 letter-spacing: .2rem; color: #466378",
-      align = "center"
-    ),
-    p(
-      HTML("One of the first things we learned about in any statistics class is that 
+          align = "center"
+        ),
+        p(
+          HTML("One of the first things we learned about in any statistics class is that 
       causation CANNOT be proven through correlation, which means that none of 
       this data can be used to prove the effect of air pollutants on respiratory 
       death rates. Please keep this in mind as you read through the rest of the 
@@ -407,21 +527,11 @@ scatter_plot <- fluidPage(
       weak, the NO2 graphs actually produced negative correlations between air 
       pollutant levels and respiratory death rate. This may just be due to the 
       unpredictable nature of the dataset."),
-      style = "text-align:left, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
-    style = "margin-right: 50px; margin-left: 50px; margin-top: 100px; text-align: left"
+          style = "text-align:left, center; font-family: 'Noto Sans'; color: #3d3d3d,"),
+        style = "margin-right: 50px; margin-left: 50px; margin-top: 100px; text-align: left"
+      )
+    )
   )
-)
-
-# -------------------------------------------------------------------------
-
-
-ui <- tabsetPanel( id = "tabs",
-  br(),
-  br(),
-  tabPanel("Intro & Context", value = "intro_page", home_page),
-  tabPanel("Line Plot", value = "lineplot_page", line_plot),
-  tabPanel("US Map", value = "map_page", interactive_map),
-  tabPanel("Scatter Plot", value = "scatter_page", scatter_plot)
 )
 
 # -------------------------------------------------------------------------
@@ -558,6 +668,8 @@ server <- function(input, output, session) {
   })
   
 }
+
+
 
 # Run the app ----
 shinyApp(ui, server)

@@ -34,14 +34,15 @@ new_air_df <- summarize(
 df <- merge(x=deaths_df, y=new_air_df, by.x=c("state_name", "YEAR"), by.y=c("state_name", "year"), all.x=TRUE)
 df <- subset(df, select=c(-URL))
 df <- filter(df, YEAR != 2005)
+
+# for U.S. States Map
+df_mainland <- filter(df, state_name != "Alaska" & state_name != "Hawaii")
+
 df <- df[-64,]
 
 # Get rid of comma in numbers
 df$"DEATHS" <- ifelse(str_detect(df$"DEATHS", ","), str_remove(df$"DEATHS", ","),df$"DEATHS")
 df$"DEATHS" <- as.numeric(df$"DEATHS")
-
-# for U.S. States Map
-df_mainland <- filter(df, state_name != "Alaska" & state_name != "Hawaii")
 
 # U.S. State map data
 state_names <- state.name[state.name != "Alaska" & state.name != "Hawaii"]
